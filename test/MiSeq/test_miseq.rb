@@ -151,64 +151,6 @@ class TestMiSeq < Test::Unit::TestCase
     assert_true(File.directory? dd.dir)
   end
 
-  test 'Data#sync works OK' do
-    MiSeq::Data.sync(@dir_src_ok, @dir_dst)
-
-    file1 = '2013-04-00_Martin_Hansen_0_Big_Bang_0.tar'
-    file2 = '2013-04-01_Martin_Hansen_1_Big_Bang_1.tar'
-    file3 = '2013-04-02_Martin_Hansen_2_Big_Bang_2.tar'
-
-    assert_true(File.exist? File.join(@dir_dst, file1))
-    assert_true(File.exist? File.join(@dir_dst, file2))
-    assert_true(File.exist? File.join(@dir_dst, file3))
-  end
-
-  test 'Data#sync dst permissions are OK' do
-    MiSeq::Data.sync(@dir_src_ok, @dir_dst)
-
-    file = '2013-04-00_Martin_Hansen_0_Big_Bang_0.tar'
-    dst  = File.join(@dir_dst, file)
-
-    assert_equal('-rw-------', `ls -l #{dst}`[0..9])
-  end
-
-  test 'Data#sync with existing dirs works OK' do
-    MiSeq::Data.sync(@dir_src_ok, @dir_dst)
-    MiSeq::Data.sync(@dir_src_ok, @dir_dst)
-
-    file1 = '2013-04-00_Martin_Hansen_0_Big_Bang_0.tar'
-    file2 = '2013-04-01_Martin_Hansen_1_Big_Bang_1.tar'
-    file3 = '2013-04-02_Martin_Hansen_2_Big_Bang_2.tar'
-
-    assert_true(File.exist? File.join(@dir_dst, file1))
-    assert_true(File.exist? File.join(@dir_dst, file2))
-    assert_true(File.exist? File.join(@dir_dst, file3))
-  end
-
-  test 'Data#sync with unfinished data dir works OK' do
-    MiSeq::Data.sync(@dir_src_unfinished, @dir_dst)
-
-    file1 = '2013-04-00_Martin_Hansen_0_Big_Bang_0.tar'
-    file2 = '2013-04-01_Martin_Hansen_1_Big_Bang_1.tar'
-    file3 = '2013-04-02_Martin_Hansen_2_Big_Bang_2.tar'
-
-    assert_true(File.exist? File.join(@dir_dst, file1))
-    assert_true(File.exist? File.join(@dir_dst, file2))
-    assert_false(File.exist? File.join(@dir_dst, file3))
-  end
-
-  test 'Data#sync log works OK' do
-    MiSeq::Data.sync(@dir_src_unfinished, @dir_dst)
-
-    lines = []
-
-    File.open(File.join(@dir_src_unfinished, 'miseq_sync.log')) do |ios|
-      ios.each { |line| lines << line }
-    end
-
-    assert_equal(8, lines.size)
-  end
-
   test 'Log#log new log file works OK' do
     logger = MiSeq::Log.new(@file_log)
     logger.log('my message')
