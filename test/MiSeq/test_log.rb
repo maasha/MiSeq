@@ -3,9 +3,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', '..')
 require 'test/helper'
 require 'lib/miseq'
 
-# rubocop:disable ClassLength
-
-# Test class for MiSeq.
+# Test class for Log.
 class TestLog < Test::Unit::TestCase
   def setup
     @dir_src  = Dir.mktmpdir('miseq_src')
