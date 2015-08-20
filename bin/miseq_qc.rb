@@ -8,4 +8,4 @@ require_relative 'lib/miseq'
 SRC = '/disk/orsted/miseq_microbio/'
 DST = '/home/microbio/public_html/'
 
-MiSeq::Data.qc(SRC, DST)
+MiSeq::QC.run(SRC, DST)
