@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'biopieces'
+require 'csv'
+require 'parallel'
+
+cpus     = 20
+out_dir  = "QC_" + Time.now.to_s.split.first
+run_name = File.expand_path(__FILE__).split(File::SEPARATOR)[-2]
+samples  = CSV.read("samples.txt", col_sep: "\s")
+
+Parallel.each(samples, in_processes: cpus) do |sample|
+  BP.new.
+  read_fastq(input: sample[1], input2: sample[2], encoding: :base_33).
+  merge_pair_seq.
+  plot_scores(terminal: :png, count: true, output: "p1_scores_#{sample[0]}.png", force: true).
+  split_pair_seq.
+  count.
+  add_key(key: :SAMPLE, value: sample[0]).
+  grab(exact: true, keys: :RECORD_TYPE, select: 'count').
+  write_table(header: true, output: "p1_#{sample[0]}_count.tab", force: true).
+  run(output_dir: out_dir, report: "qc_count_#{sample[0]}.html")
+end
+
+BP.new.
+read_table(input: "#{out_dir}/p1*_count.tab", delimiter: "\t").
+sort(key: :COUNT, reverse: true).
+plot_histogram(key: :SAMPLE, value: :COUNT, output: "p2_count.png", terminal: :png, force: true).
+write_table(header: true, pretty: true, commify: true, output: "p2_count.tab", force: true, skip: [:RECORD_TYPE]).
+run(output_dir: out_dir, report: "qc_report.html")
