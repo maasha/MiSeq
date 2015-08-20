@@ -7,7 +7,7 @@
 
 require_relative 'lib/miseq'
 
-SRC = '/volume1/miseq_data/old/'
+SRC = '/volume1/miseq_data/'
 DST = 'microbio@newton:data/'
 
 MiSeq::Data.sync(SRC, DST)
