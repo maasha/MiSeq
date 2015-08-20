@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 
-# Outputs a table of sample and file names from a directory with MiSeq FASTQ files.
+# Outputs a table of sample and file names from a directory with MiSeq FASTQ
+# files.
 
 require 'pp'
 
 def find_prefix(files)
-  prefix = ""
+  prefix = ''
 
   hash = Hash.new { |h, k| h[k] = {} }
 
@@ -23,7 +24,7 @@ def find_prefix(files)
 end
 
 def find_suffix(files)
-  suffix = ""
+  suffix = ''
 
   hash = Hash.new { |h, k| h[k] = {} }
 
@@ -41,23 +42,24 @@ def find_suffix(files)
 end
 
 if ARGV.size == 0
-  $stderr.puts "Usage: #{File.basename(__FILE__)} <FASTQ files>" if ARGV.size == 0
+  $stderr.puts "Usage: #{File.basename(__FILE__)} <FASTQ files>"
   exit
 end
 
 files = ARGV.dup
-files = files.map { |file| File.basename(file) }.select { |file| file.match /_R1_/}.sort
+files = files.map { |file| File.basename(file) }.
+        select { |file| file.match(/_R1_/) }.sort
 
 prefix = find_prefix(files)
 suffix = find_suffix(files)
 
 $stderr.puts "Prefex: #{prefix}   Suffix: #{suffix}"
 
-puts "# ID Name-match"
+puts '# ID Name-match'
 
 files.each do |file|
-  sample  = file[prefix.size     ... -1 * suffix.size]
-  pattern = file[prefix.size - 1 ..  -1 * suffix.size]
+  sample  = file[prefix.size...-1 * suffix.size]
+  pattern = file[prefix.size - 1..-1 * suffix.size]
 
-  puts [sample, pattern].join(" ")
+  puts [sample, pattern].join(' ')
 end
