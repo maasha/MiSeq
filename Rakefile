@@ -5,7 +5,7 @@ require 'rake/testtask'
 task default: 'test'
 
 Rake::TestTask.new do |t|
-  t.test_files = Dir['test/*'].select do |f|
+  t.test_files = Dir['test/MiSeq/*'].select do |f|
     File.basename(f).match(/^test_.+\.rb$/)
   end
 
