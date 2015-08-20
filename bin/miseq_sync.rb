@@ -5,7 +5,9 @@
 # located in the SampleSheet.csv file within. Next each directory is packed with
 # tar and synchcronized to a remote location.
 
-require_relative '../lib/miseq'
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+
+require 'miseq'
 
 SRC = '/volume1/miseq_data/'
 DST = 'microbio@newton:data/'
