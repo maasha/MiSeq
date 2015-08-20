@@ -27,4 +27,4 @@ read_table(input: "#{out_dir}/qc*_count.tab", delimiter: "\t").
 sort(key: :COUNT, reverse: true).
 plot_histogram(key: :SAMPLE, value: :COUNT, output: "qc_count.png", terminal: :png, force: true).
 write_table(header: true, pretty: true, commify: true, output: "qc_count.tab", force: true, skip: [:RECORD_TYPE]).
-run(output_dir: out_dir, report: "qc_report.html")
+run(output_dir: out_dir, report: "qc_report.html", email: "mail@maasha.dk", subject: "#{run_name} done")
