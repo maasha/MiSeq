@@ -8,11 +8,8 @@ require 'lib/miseq'
 # Test class for MiSeq.
 class TestData < Test::Unit::TestCase
   def setup
-    @dir_src      = Dir.mktmpdir('miseq_src')
-    @dir_dst      = Dir.mktmpdir('miseq_dst')
-    @file_stats   = File.join(@dir_src, 'GenerateFASTQRunStatistics.xml')
-    @file_samples = File.join(@dir_src, 'Samplesheet.csv')
-    @file_log     = File.join(@dir_src, 'log.txt')
+    @dir_src = Dir.mktmpdir('miseq_src')
+    @dir_dst = Dir.mktmpdir('miseq_dst')
 
     setup_dir_src_ok
     setup_dir_src_unfinished
