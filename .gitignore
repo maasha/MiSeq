@@ -1,0 +1,6 @@
+*.swp
+*.gem
+doc/
+pkg/
+.yardoc/
+*tags*
