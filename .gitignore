@@ -4,3 +4,4 @@ doc/
 pkg/
 .yardoc/
 *tags*
+.DS_Store
