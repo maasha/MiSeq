@@ -200,7 +200,13 @@ class TestMiSeq < Test::Unit::TestCase
   test 'Data#sync log works OK' do
     MiSeq::Data.sync(@dir_src_unfinished, @dir_dst)
 
-    puts File.read(File.join(@dir_src_unfinished, 'miseq_sync.log'))
+    lines = []
+
+    File.open(File.join(@dir_src_unfinished, 'miseq_sync.log')) do |ios|
+      ios.each { |line| lines << line }
+    end
+
+    assert_equal(8, lines.size)
   end
 
   test 'Log#log new log file works OK' do
