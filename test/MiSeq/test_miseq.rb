@@ -63,20 +63,6 @@ class TestMiSeq < Test::Unit::TestCase
     FileUtils.rm_rf @dir_src
   end
 
-  test 'RunStatistics#complete? with non existing file' do
-    assert_false(MiSeq::RunStatistics.complete?(''))
-  end
-
-  test 'RunStatistics#complete? without CompletionTime tag' do
-    File.open(@file_stats, 'w') { |ios| ios.write('') }
-    assert_false(MiSeq::RunStatistics.complete?(@file_stats))
-  end
-
-  test 'RunStatistics#complete? with CompletionTime tag' do
-    File.open(@file_stats, 'w') { |ios| ios.write('  <CompletionTime>') }
-    assert_true(MiSeq::RunStatistics.complete?(@file_stats))
-  end
-
   test 'SampleSheet#investigator_name without SampleSheet.csv fails' do
     ss = MiSeq::SampleSheet.new('')
     assert_raise(MiSeq::SampleSheetError) { ss.investigator_name }
