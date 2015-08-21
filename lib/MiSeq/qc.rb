@@ -25,8 +25,9 @@ module MiSeq
     #
     # @return [QC] Class instance.
     def initialize(src, dst)
-      @src = src
-      @dst = dst
+      @src    = src
+      @dst    = dst
+      @logger = MiSeq::Log.new(File.join(@dst, 'miseq_qc.log'))
     end
 
     # Method to run QC of all MiSeq runs in the dst dir for which no src dir
@@ -36,6 +37,8 @@ module MiSeq
         dst_dir = File.join(@dst, dir)
         src_dir = File.join(@src, dir)
 
+        @logger.log("QC of #{dst_dir} start")
+
         Dir.mkdir dst_dir
         sample_dir = File.join(dst_dir, SEQ_DIR)
         FileUtils.ln_s(src_dir, sample_dir)
@@ -44,6 +47,8 @@ module MiSeq
         write_sample_file(File.join(dst_dir, 'samples.txt'), files)
         copy_biopieces_script(dst_dir)
         run_biopieces_script(dst_dir)
+
+        @logger.log("QC of #{dst_dir} done")
       end
     end
 
@@ -69,10 +74,10 @@ module MiSeq
 
     # Returns a list of all directories that should be QC'ed.
     #
-    # @return [Array] List of directories
+    # @return [Array] List of sorted directories
     def qc_dirs
       src_dirs.map { |dir| File.basename dir } -
-        dst_dirs.map { |dir| File.basename dir }
+        dst_dirs.map { |dir| File.basename dir }.sort
     end
 
     # Return a list of all FASTQ files from a director.
@@ -88,10 +93,15 @@ module MiSeq
     #
     # @param files [String] List of FASTQ files.
     def write_sample_file(sample_file, files)
-      table = []
-      table << extract_sample_names(files)
-      table << sample_paths(files, '_R1_')
-      table << sample_paths(files, '_R2_')
+      samples = extract_sample_names(files)
+      read1   = sample_paths(files, '_R1_')
+      read2   = sample_paths(files, '_R2_')
+
+      @logger.log("Processing #{samples.size} samples")
+      @logger.log("Processing #{read1} R1 files")
+      @logger.log("Processing #{read2} R2 files")
+
+      table = [samples, read1, read2]
 
       File.open(sample_file, 'w') do |ios|
         table.transpose.each do |row|
