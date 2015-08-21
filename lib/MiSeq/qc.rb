@@ -81,7 +81,7 @@ module MiSeq
     #
     # @return [Array] List of files
     def fastq_files(dir)
-      Dir["#{dir}/*.fastq.gz"]
+      Dir["#{dir}/*.fastq.gz"].reject { |f| f.match(/Undetermined/) }.sort
     end
 
     # Write a sample file
@@ -149,7 +149,9 @@ module MiSeq
     #
     # @param dst [String] Destination directory.
     def copy_biopieces_script(dst)
-      FileUtils.cp("bin/#{BP_SCRIPT}", dst)
+      bin_dir = File.join(File.dirname(__FILE__), '..', '..', 'bin')
+
+      FileUtils.cp(File.join(bin_dir, BP_SCRIPT), dst)
     end
 
     # Run the Biopieces QC script.
