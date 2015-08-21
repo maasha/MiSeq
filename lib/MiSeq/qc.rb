@@ -98,8 +98,8 @@ module MiSeq
       read2   = sample_paths(files, '_R2_')
 
       @logger.log("Processing #{samples.size} samples")
-      @logger.log("Processing #{read1} R1 files")
-      @logger.log("Processing #{read2} R2 files")
+      @logger.log("Processing #{read1.size} R1 files")
+      @logger.log("Processing #{read2.size} R2 files")
 
       table = [samples, read1, read2]
 
